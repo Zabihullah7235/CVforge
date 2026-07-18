@@ -109,9 +109,13 @@ export const BuilderView: React.FC<BuilderViewProps> = ({
     if (!data.personalInfo.summary.trim()) return;
     setIsImprovingSummary(true);
     try {
+      const token = localStorage.getItem('cvforge_token');
       const res = await fetch('/api/ai/suggest', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({ action: 'improve_summary', text: data.personalInfo.summary })
       });
       const resData = await res.json();
@@ -129,9 +133,13 @@ export const BuilderView: React.FC<BuilderViewProps> = ({
     if (!currentDesc.trim()) return;
     setStrengtheningExpId(expId);
     try {
+      const token = localStorage.getItem('cvforge_token');
       const res = await fetch('/api/ai/suggest', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({ action: 'strengthen_bullet', text: currentDesc })
       });
       const resData = await res.json();
@@ -156,9 +164,13 @@ export const BuilderView: React.FC<BuilderViewProps> = ({
     const title = data.personalInfo.professionalTitle || 'Software Engineer';
     setIsSuggestingSkills(true);
     try {
+      const token = localStorage.getItem('cvforge_token');
       const res = await fetch('/api/ai/suggest', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({ action: 'suggest_skills', text: title })
       });
       const resData = await res.json();
@@ -189,10 +201,14 @@ export const BuilderView: React.FC<BuilderViewProps> = ({
     setChatLoading(true);
 
     try {
+      const token = localStorage.getItem('cvforge_token');
       const history = [...chatMessages, userMsg];
       const res = await fetch('/api/ai/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({ messages: history })
       });
       const resData = await res.json();
@@ -430,6 +446,21 @@ export const BuilderView: React.FC<BuilderViewProps> = ({
   };
 
   const changeTemplate = (templateId: TemplateId) => {
+    const userJson = localStorage.getItem('cvforge_user');
+    let isVerified = true;
+    if (userJson) {
+      try {
+        const u = JSON.parse(userJson);
+        if (u.isVerified === false) {
+          isVerified = false;
+        }
+      } catch (e) {}
+    }
+    
+    if (!isVerified && templateId !== 'modern') {
+      alert('✉ Please verify your email address first to unlock premium CV template styles.');
+      return;
+    }
     setData(prev => ({ ...prev, templateId }));
   };
 

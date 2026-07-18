@@ -141,14 +141,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           </div>
 
           <h1 className="text-4xl md:text-6xl font-black tracking-tight max-w-4xl leading-tight">
-            Build Professional, ATS-Crushing Resumes in{' '}
+            Create Modern{' '}
             <span className="bg-gradient-to-r from-blue-400 via-emerald-400 to-indigo-400 bg-clip-text text-transparent">
-              Minutes
-            </span>
+              ATS-Friendly CVs
+            </span>{' '}
+            That Get You Hired
           </h1>
 
-          <p className="text-slate-400 text-base md:text-xl max-w-2xl mt-6 font-medium leading-relaxed">
-            Harness the power of low-latency Gemini AI to instantly refine your bullet points, auto-suggest relevant credentials, and generate professional headshots. Built to beat scanning algorithms.
+          <p className="text-slate-300 text-base md:text-xl max-w-2xl mt-6 font-medium leading-relaxed">
+            Easily build, customize, and refine your professional CV and download your job-winning resume in premium PDF format. Optimized to pass through recruiter scanning systems effortlessly.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mt-10">

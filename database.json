@@ -1,0 +1,274 @@
+{
+  "users": [
+    {
+      "id": "user-zabihullah",
+      "email": "zabihullah7235@gmail.com",
+      "passwordHash": "$2a$10$UvT70tVsnN3xYmS64O3C.u8lG7k/Yq.F9u.P89wVq/e.O5Dk76Y.a",
+      "fullName": "Zabihullah",
+      "username": "zabihullah",
+      "phone": "+1 (555) 019-2831",
+      "country": "United States",
+      "plan": "premium",
+      "isBanned": false,
+      "accountStatus": "active",
+      "createdAt": "2026-01-15T08:00:00.000Z",
+      "lastLogin": "2026-07-18T03:50:00.000Z",
+      "paymentStatus": "paid",
+      "resumeCount": 4,
+      "aiCredits": 500,
+      "profilePhoto": ""
+    },
+    {
+      "id": "user-emily",
+      "email": "emily.smith@example.com",
+      "passwordHash": "$2a$10$UvT70tVsnN3xYmS64O3C.u8lG7k/Yq.F9u.P89wVq/e.O5Dk76Y.a",
+      "fullName": "Emily Smith",
+      "username": "emilysmith",
+      "phone": "+1 (555) 042-3498",
+      "country": "United Kingdom",
+      "plan": "basic",
+      "isBanned": false,
+      "accountStatus": "active",
+      "createdAt": "2026-03-14T09:30:00.000Z",
+      "lastLogin": "2026-07-17T14:15:00.000Z",
+      "paymentStatus": "paid",
+      "resumeCount": 2,
+      "aiCredits": 80,
+      "profilePhoto": ""
+    },
+    {
+      "id": "user-marcus",
+      "email": "dev.marcus@example.com",
+      "passwordHash": "$2a$10$UvT70tVsnN3xYmS64O3C.u8lG7k/Yq.F9u.P89wVq/e.O5Dk76Y.a",
+      "fullName": "Marcus Vance",
+      "username": "marcusv",
+      "phone": "+33 6 5555 0143",
+      "country": "France",
+      "plan": "pro",
+      "isBanned": false,
+      "accountStatus": "active",
+      "createdAt": "2026-05-22T15:45:00.000Z",
+      "lastLogin": "2026-07-18T01:20:00.000Z",
+      "paymentStatus": "paid",
+      "resumeCount": 7,
+      "aiCredits": 250,
+      "profilePhoto": ""
+    },
+    {
+      "id": "user-spam",
+      "email": "troll.coder@example.com",
+      "passwordHash": "$2a$10$UvT70tVsnN3xYmS64O3C.u8lG7k/Yq.F9u.P89wVq/e.O5Dk76Y.a",
+      "fullName": "Spammy McSpam",
+      "username": "spammer",
+      "phone": "",
+      "country": "Unknown",
+      "plan": "free",
+      "isBanned": true,
+      "accountStatus": "banned",
+      "createdAt": "2026-07-01T11:15:00.000Z",
+      "lastLogin": "2026-07-02T10:00:00.000Z",
+      "paymentStatus": "unpaid",
+      "resumeCount": 1,
+      "aiCredits": 0,
+      "profilePhoto": ""
+    }
+  ],
+  "resumes": [
+    {
+      "id": "res-default",
+      "title": "Senior Software Engineer Resume",
+      "templateId": "modern",
+      "updatedAt": "2026-07-18T03:50:00.000Z",
+      "userId": "user-zabihullah",
+      "data": {
+        "id": "res-default",
+        "title": "Senior Software Engineer Resume",
+        "templateId": "modern",
+        "personalInfo": {
+          "fullName": "Zabihullah",
+          "professionalTitle": "Senior Full Stack Software Engineer",
+          "email": "zabihullah7235@gmail.com",
+          "phone": "+1 (555) 019-2831",
+          "location": "San Francisco, CA",
+          "website": "https://cvforge.com/zabihullah",
+          "github": "github.com/zabihullah",
+          "linkedin": "linkedin.com/in/zabihullah",
+          "summary": "Innovative Senior Software Engineer with 8+ years of expertise in architecting, developing, and deploying enterprise-grade SaaS web applications. Specialized in React, Node.js, and high-performance cloud architectures.",
+          "photoUrl": ""
+        },
+        "experience": [
+          {
+            "id": "exp-1",
+            "company": "TechVanguard Solutions",
+            "position": "Lead Software Architect",
+            "startDate": "2022-03",
+            "endDate": "",
+            "current": true,
+            "location": "San Francisco, CA",
+            "description": "Directed development of high-throughput real-time collaboration widgets. Scaled backend API services, decreasing response latency by 35% across 2 million active clients."
+          }
+        ],
+        "education": [
+          {
+            "id": "edu-1",
+            "institution": "Stanford University",
+            "degree": "Master of Science",
+            "fieldOfStudy": "Computer Science & Engineering",
+            "startDate": "2018-09",
+            "endDate": "2020-06",
+            "current": false,
+            "location": "Stanford, CA",
+            "description": "Specialized in Artificial Intelligence and Scalable Distributed Systems. Graduated with honors."
+          }
+        ],
+        "skills": [
+          "TypeScript",
+          "React 19",
+          "Express.js",
+          "Node.js",
+          "Tailwind CSS",
+          "Firebase",
+          "PostgreSQL",
+          "System Design"
+        ],
+        "projects": [
+          {
+            "id": "proj-1",
+            "name": "CVForge SaaS Infrastructure",
+            "description": "Designed and deployed a highly optimized, bulletproof CV creation server supporting microsecond template compiling and AI writing triggers.",
+            "url": "github.com/zabihullah/cvforge",
+            "technologies": [
+              "React",
+              "TypeScript",
+              "Vite"
+            ]
+          }
+        ],
+        "certifications": [
+          {
+            "id": "cert-1",
+            "name": "AWS Certified Solutions Architect – Professional",
+            "issuer": "Amazon Web Services",
+            "date": "2025-05",
+            "url": ""
+          }
+        ],
+        "languages": [
+          {
+            "id": "lang-1",
+            "name": "English",
+            "level": "Native"
+          }
+        ],
+        "customSections": [],
+        "isAtsFriendly": true,
+        "updatedAt": "2026-07-18T03:50:00.000Z"
+      }
+    }
+  ],
+  "payments": [
+    {
+      "id": "pay-1",
+      "userId": "user-zabihullah",
+      "transactionId": "ch_3Mv8XpLkdGb7jT541S2wK9m2",
+      "amount": 49.00,
+      "currency": "USD",
+      "paymentMethod": "Credit Card (Visa)",
+      "invoiceNumber": "INV-2026-001",
+      "date": "2026-01-15T08:15:00.000Z",
+      "plan": "premium",
+      "status": "completed",
+      "refundStatus": "none"
+    },
+    {
+      "id": "pay-2",
+      "userId": "user-emily",
+      "transactionId": "ch_3Mv8XpLkdGb7jT541S2wK9m3",
+      "amount": 19.00,
+      "currency": "USD",
+      "paymentMethod": "PayPal",
+      "invoiceNumber": "INV-2026-002",
+      "date": "2026-03-14T09:45:00.000Z",
+      "plan": "basic",
+      "status": "completed",
+      "refundStatus": "none"
+    },
+    {
+      "id": "pay-3",
+      "userId": "user-marcus",
+      "transactionId": "ch_3Mv8XpLkdGb7jT541S2wK9m4",
+      "amount": 22.00,
+      "currency": "USD",
+      "paymentMethod": "Debit Card (Mastercard)",
+      "invoiceNumber": "INV-2026-003",
+      "date": "2026-05-22T16:00:00.000Z",
+      "plan": "pro",
+      "status": "completed",
+      "refundStatus": "none"
+    }
+  ],
+  "contactMessages": [
+    {
+      "id": "msg-1",
+      "name": "Thomas Edison",
+      "email": "thomas@lightbulb.com",
+      "message": "Hello, I absolutely love the simplicity of your resumes. Do you offer bulk licensing options for educational institutions?",
+      "status": "unread",
+      "replyMessage": "",
+      "date": "2026-07-17T11:20:00.000Z"
+    },
+    {
+      "id": "msg-2",
+      "name": "Grace Hopper",
+      "email": "grace.hopper@navy.mil",
+      "message": "Found a tiny margin bug on the ATS print template. Overall, excellent compiler. It has beautiful output.",
+      "status": "read",
+      "replyMessage": "Thank you Grace! We have resolved the compiler margins.",
+      "date": "2026-07-16T14:30:00.000Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif-1",
+      "type": "user_signup",
+      "message": "New premium account registered: Zabihullah (zabihullah7235@gmail.com)",
+      "date": "2026-01-15T08:00:00.000Z",
+      "read": true
+    },
+    {
+      "id": "notif-2",
+      "type": "payment_success",
+      "message": "Payment Successful: $49.00 received from Zabihullah for Premium plan",
+      "date": "2026-01-15T08:15:00.000Z",
+      "read": true
+    },
+    {
+      "id": "notif-3",
+      "type": "support_ticket",
+      "message": "New support inquiry from Thomas Edison (thomas@lightbulb.com)",
+      "date": "2026-07-17T11:20:00.000Z",
+      "read": false
+    }
+  ],
+  "analytics": {
+    "websiteVisitors": 15420,
+    "dailyLogs": [
+      { "date": "07-11", "visitors": 850, "signups": 12, "resumes": 45, "aiUsage": 110, "revenue": 147 },
+      { "date": "07-12", "visitors": 920, "signups": 15, "resumes": 52, "aiUsage": 134, "revenue": 189 },
+      { "date": "07-13", "visitors": 1100, "signups": 22, "resumes": 67, "aiUsage": 180, "revenue": 290 },
+      { "date": "07-14", "visitors": 1050, "signups": 18, "resumes": 59, "aiUsage": 152, "revenue": 210 },
+      { "date": "07-15", "visitors": 1250, "signups": 31, "resumes": 84, "aiUsage": 210, "revenue": 450 },
+      { "date": "07-16", "visitors": 1300, "signups": 28, "resumes": 91, "aiUsage": 235, "revenue": 390 },
+      { "date": "07-17", "visitors": 1410, "signups": 35, "resumes": 105, "aiUsage": 298, "revenue": 580 }
+    ],
+    "monthlyLogs": [
+      { "month": "Jan", "visitors": 12000, "signups": 250, "resumes": 800, "aiUsage": 1500, "revenue": 3800 },
+      { "month": "Feb", "visitors": 14000, "signups": 310, "resumes": 1100, "aiUsage": 2100, "revenue": 4500 },
+      { "month": "Mar", "visitors": 18000, "signups": 420, "resumes": 1500, "aiUsage": 3200, "revenue": 6200 },
+      { "month": "Apr", "visitors": 21000, "signups": 510, "resumes": 1900, "aiUsage": 4300, "revenue": 7900 },
+      { "month": "May", "visitors": 25000, "signups": 630, "resumes": 2400, "aiUsage": 5600, "revenue": 9800 },
+      { "month": "Jun", "visitors": 31000, "signups": 820, "resumes": 3100, "aiUsage": 7400, "revenue": 13400 },
+      { "month": "Jul", "visitors": 38000, "signups": 1050, "resumes": 4200, "aiUsage": 9800, "revenue": 18200 }
+    ]
+  }
+}

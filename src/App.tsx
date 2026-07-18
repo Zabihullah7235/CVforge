@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Sidebar } from './components/Sidebar';
+import { Header } from './components/Header';
 import { LandingPage } from './components/LandingPage';
 import { DashboardView } from './components/DashboardView';
 import { BuilderView } from './components/BuilderView';
@@ -7,9 +8,10 @@ import { TemplatesView } from './components/TemplatesView';
 import { PricingView } from './components/PricingView';
 import { AdminView } from './components/AdminView';
 import { AuthModal } from './components/AuthModal';
+import { ProtectedView } from './components/ProtectedView';
 import { INITIAL_RESUME_DATA } from './data/templates';
 import { ResumeData, User, TemplateId } from './types';
-import { Sparkles, CheckCircle2, ShieldAlert, FileText, ArrowRight } from 'lucide-react';
+import { Sparkles, CheckCircle2, ShieldAlert, FileText, ArrowRight, Mail } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<string>('landing');
@@ -21,13 +23,24 @@ export default function App() {
   const [authOpen, setAuthOpen] = useState<boolean>(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
+  // Helper to obtain secure JWT authorization headers
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem('cvforge_token');
+    return {
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+    };
+  };
+
   // Load user session and resumes from localStorage on mount
   useEffect(() => {
     const savedUser = localStorage.getItem('cvforge_user');
-    if (savedUser) {
+    const savedToken = localStorage.getItem('cvforge_token');
+    if (savedUser && savedToken) {
       try {
         const parsedUser = JSON.parse(savedUser);
         setCurrentUser(parsedUser);
+        syncWithCloud(parsedUser.id, savedToken);
       } catch (e) {
         console.error(e);
       }
@@ -50,10 +63,14 @@ export default function App() {
     }
   }, []);
 
-  // Fetch from in-memory backend endpoint as primary cloud-sync, with local persistence fallback
-  const syncWithCloud = async (userId: string) => {
+  // Fetch from Express database as primary cloud-sync, with local persistence fallback
+  const syncWithCloud = async (userId: string, token: string) => {
     try {
-      const res = await fetch(`/api/resumes?userId=${userId}`);
+      const res = await fetch(`/api/resumes`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (res.ok) {
         const cloudResumes = await res.json();
         if (cloudResumes.length > 0) {
@@ -73,22 +90,24 @@ export default function App() {
     }
   };
 
-  const handleLoginSuccess = (user: User) => {
+  const handleLoginSuccess = (user: User, token: string) => {
     setCurrentUser(user);
     localStorage.setItem('cvforge_user', JSON.stringify(user));
+    localStorage.setItem('cvforge_token', token);
     showToast('success', `Welcome back, ${user.fullName}! Sessions synchronized.`);
-    syncWithCloud(user.id);
+    syncWithCloud(user.id, token);
     setActiveTab('dashboard');
   };
 
   const handleLogout = () => {
     setCurrentUser(null);
     localStorage.removeItem('cvforge_user');
+    localStorage.removeItem('cvforge_token');
     showToast('success', 'Logged out successfully.');
     setActiveTab('landing');
   };
 
-  const handleUpgradeSuccess = (plan: 'free' | 'basic' | 'standard' | 'premium') => {
+  const handleUpgradeSuccess = (plan: 'free' | 'basic' | 'pro' | 'business' | 'enterprise' | 'premium') => {
     if (currentUser) {
       const updatedUser: User = { ...currentUser, plan };
       setCurrentUser(updatedUser);
@@ -127,12 +146,11 @@ export default function App() {
     if (currentUser) {
       fetch('/api/resumes', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
           id: newId,
           title: freshResume.title,
           templateId: freshResume.templateId,
-          userId: currentUser.id,
           data: freshResume
         })
       });
@@ -151,12 +169,11 @@ export default function App() {
       try {
         await fetch('/api/resumes', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: getAuthHeaders(),
           body: JSON.stringify({
             id: updatedData.id,
             title: updatedData.title,
             templateId: updatedData.templateId,
-            userId: currentUser.id,
             data: updatedData
           })
         });
@@ -190,12 +207,11 @@ export default function App() {
       if (currentUser) {
         fetch('/api/resumes', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: getAuthHeaders(),
           body: JSON.stringify({
             id: dupId,
             title: duplicate.title,
             templateId: duplicate.templateId,
-            userId: currentUser.id,
             data: duplicate
           })
         });
@@ -215,7 +231,10 @@ export default function App() {
 
     if (currentUser) {
       try {
-        await fetch(`/api/resumes/${id}`, { method: 'DELETE' });
+        await fetch(`/api/resumes/${id}`, {
+          method: 'DELETE',
+          headers: getAuthHeaders()
+        });
       } catch (e) {
         console.warn('Backend deletion deferred.', e);
       }
@@ -260,6 +279,50 @@ export default function App() {
       {/* MAIN VIEW CONTENT CONTAINER */}
       <main className="flex-1 overflow-hidden flex flex-col justify-between print:overflow-visible">
         
+        {/* STICKY GLOBAL HEADER */}
+        {!activeResumeId && (
+          <Header
+            currentUser={currentUser}
+            onLogout={handleLogout}
+            onOpenLogin={() => setAuthOpen(true)}
+            onNavigateTab={(tab) => {
+              setActiveResumeId(null);
+              setActiveTab(tab);
+            }}
+            activeTab={activeTab}
+          />
+        )}
+
+        {currentUser && !currentUser.isVerified && activeTab !== 'landing' && (
+          <div className="bg-amber-500 text-white text-xs font-bold px-8 py-2.5 flex items-center justify-between shadow-md gap-4 shrink-0">
+            <div className="flex items-center gap-2">
+              <Mail className="w-4 h-4 text-white shrink-0" />
+              <span>Please verify your email address to unlock premium templates, AI tools, and unlimited resume builder access.</span>
+            </div>
+            <button
+              onClick={async () => {
+                try {
+                  const res = await fetch('/api/auth/verify-email', {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({ email: currentUser.email })
+                  });
+                  if (res.ok) {
+                    showToast('success', 'Verification email dispatched successfully!');
+                  } else {
+                    showToast('error', 'Failed to dispatch verification email.');
+                  }
+                } catch (e) {
+                  showToast('error', 'Network error. Could not dispatch verification.');
+                }
+              }}
+              className="bg-white text-amber-600 hover:bg-amber-50 text-[10px] font-extrabold uppercase tracking-wide px-3 py-1 rounded-lg transition shrink-0 cursor-pointer shadow-sm"
+            >
+              Resend Verification Mail
+            </button>
+          </div>
+        )}
+        
         {/* TOP STATUS BAR BAR (only if not in landing) */}
         {activeTab !== 'landing' && (
           <div className="bg-white border-b border-slate-200 px-8 py-3 flex items-center justify-between shrink-0 print:hidden">
@@ -289,11 +352,13 @@ export default function App() {
         {/* COMPONENT VIEWS PORT */}
         <div className="flex-1 overflow-y-auto print:overflow-visible">
           {activeResumeId ? (
-            <BuilderView
-              initialData={activeResume}
-              onSave={handleSaveResume}
-              currentUserPlan={currentUser?.plan || 'free'}
-            />
+            <ProtectedView currentUser={currentUser} onOpenLogin={() => setAuthOpen(true)} onNavigateTab={setActiveTab}>
+              <BuilderView
+                initialData={activeResume}
+                onSave={handleSaveResume}
+                currentUserPlan={currentUser?.plan || 'free'}
+              />
+            </ProtectedView>
           ) : (
             <>
               {activeTab === 'landing' && (
@@ -316,41 +381,47 @@ export default function App() {
               )}
 
               {activeTab === 'dashboard' && (
-                <DashboardView
-                  resumes={resumes}
-                  currentUser={currentUser}
-                  onEdit={(id) => setActiveResumeId(id)}
-                  onDuplicate={handleDuplicateResume}
-                  onDelete={handleDeleteResume}
-                  onCreateNew={handleCreateNewResume}
-                  onOpenLogin={() => setAuthOpen(true)}
-                  onNavigateTab={(tab) => setActiveTab(tab)}
-                />
+                <ProtectedView currentUser={currentUser} onOpenLogin={() => setAuthOpen(true)} onNavigateTab={setActiveTab}>
+                  <DashboardView
+                    resumes={resumes}
+                    currentUser={currentUser}
+                    onEdit={(id) => setActiveResumeId(id)}
+                    onDuplicate={handleDuplicateResume}
+                    onDelete={handleDeleteResume}
+                    onCreateNew={handleCreateNewResume}
+                    onOpenLogin={() => setAuthOpen(true)}
+                    onNavigateTab={(tab) => setActiveTab(tab)}
+                  />
+                </ProtectedView>
               )}
 
               {activeTab === 'resumes' && (
-                <DashboardView
-                  resumes={resumes}
-                  currentUser={currentUser}
-                  onEdit={(id) => setActiveResumeId(id)}
-                  onDuplicate={handleDuplicateResume}
-                  onDelete={handleDeleteResume}
-                  onCreateNew={handleCreateNewResume}
-                  onOpenLogin={() => setAuthOpen(true)}
-                  onNavigateTab={(tab) => setActiveTab(tab)}
-                />
+                <ProtectedView currentUser={currentUser} onOpenLogin={() => setAuthOpen(true)} onNavigateTab={setActiveTab}>
+                  <DashboardView
+                    resumes={resumes}
+                    currentUser={currentUser}
+                    onEdit={(id) => setActiveResumeId(id)}
+                    onDuplicate={handleDuplicateResume}
+                    onDelete={handleDeleteResume}
+                    onCreateNew={handleCreateNewResume}
+                    onOpenLogin={() => setAuthOpen(true)}
+                    onNavigateTab={(tab) => setActiveTab(tab)}
+                  />
+                </ProtectedView>
               )}
 
               {activeTab === 'templates' && (
-                <TemplatesView
-                  activeTemplateId={activeResume?.templateId || 'modern'}
-                  onSelectTemplate={(templateId) => {
-                    handleSelectTemplateDirectly(templateId);
-                    if (resumes.length > 0) {
-                      setActiveResumeId(resumes[0].id);
-                    }
-                  }}
-                />
+                <ProtectedView currentUser={currentUser} onOpenLogin={() => setAuthOpen(true)} onNavigateTab={setActiveTab}>
+                  <TemplatesView
+                    activeTemplateId={activeResume?.templateId || 'modern'}
+                    onSelectTemplate={(templateId) => {
+                      handleSelectTemplateDirectly(templateId);
+                      if (resumes.length > 0) {
+                        setActiveResumeId(resumes[0].id);
+                      }
+                    }}
+                  />
+                </ProtectedView>
               )}
 
               {activeTab === 'pricing' && (
@@ -362,7 +433,9 @@ export default function App() {
               )}
 
               {activeTab === 'admin' && (
-                <AdminView currentUser={currentUser} />
+                <ProtectedView currentUser={currentUser} onOpenLogin={() => setAuthOpen(true)} onNavigateTab={setActiveTab}>
+                  <AdminView currentUser={currentUser} />
+                </ProtectedView>
               )}
             </>
           )}

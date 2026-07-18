@@ -99,11 +99,17 @@ export interface User {
   id: string;
   email: string;
   fullName: string;
-  plan: 'free' | 'basic' | 'standard' | 'premium';
+  username?: string;
+  phone?: string;
+  country?: string;
+  plan: 'free' | 'basic' | 'pro' | 'business' | 'enterprise' | 'standard' | 'premium';
   isBanned: boolean;
   createdAt: string;
-  resumesCreatedTodayCount: number;
-  lastResumeCreatedDate: string;
+  resumesCreatedTodayCount?: number;
+  lastResumeCreatedDate?: string;
+  profilePhoto?: string;
+  aiCredits?: number;
+  isVerified?: boolean;
 }
 
 export interface ChatMessage {

@@ -1,0 +1,12 @@
+# Robots.txt configuration for CVForge SaaS Pro
+User-agent: *
+Allow: /
+Allow: /templates
+Allow: /pricing
+
+# Disallow indexing private user dashboard metrics and resume editors
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /builder
+
+Sitemap: https://cvforge-saas-pro.com/sitemap.xml

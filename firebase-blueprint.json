@@ -1,0 +1,143 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User profile with plan details, capabilities and account status",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The unique user identifier matching their Auth UID" },
+        "email": { "type": "string", "description": "The authenticated email address" },
+        "fullName": { "type": "string", "description": "The full name of the user" },
+        "username": { "type": "string", "description": "Unique username chosen by the user" },
+        "phone": { "type": "string", "description": "Optional contact phone number" },
+        "country": { "type": "string", "description": "User country of origin" },
+        "plan": { "type": "string", "enum": ["free", "basic", "pro", "business", "enterprise"], "description": "Subscription tier" },
+        "accountStatus": { "type": "string", "enum": ["active", "suspended", "banned"], "description": "Security and moderation state" },
+        "createdAt": { "type": "string", "description": "Account registration timestamp" },
+        "lastLogin": { "type": "string", "description": "Last active timestamp" },
+        "paymentStatus": { "type": "string", "enum": ["paid", "unpaid"], "description": "Payment standing" },
+        "resumeCount": { "type": "number", "description": "Total active resumes" },
+        "aiCredits": { "type": "number", "description": "Available AI words/creations tokens" },
+        "profilePhoto": { "type": "string", "description": "Base64 or URL of user photo" }
+      },
+      "required": ["id", "email", "fullName", "plan", "accountStatus"]
+    },
+    "Resume": {
+      "title": "Resume Document",
+      "description": "Professional user CV/resume data",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Resume unique identifier" },
+        "title": { "type": "string", "description": "The document title or file name" },
+        "templateId": { "type": "string", "description": "The style template key" },
+        "updatedAt": { "type": "string", "description": "Last edit timestamp" },
+        "userId": { "type": "string", "description": "The owner user ID reference" },
+        "data": { "type": "object", "description": "Comprehensive sections, work experience, education, skills, and personal information" }
+      },
+      "required": ["id", "title", "userId"]
+    },
+    "Payment": {
+      "title": "Payment Transaction",
+      "description": "Stripe invoices and debit logs",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique transaction key" },
+        "userId": { "type": "string", "description": "The billing user reference" },
+        "transactionId": { "type": "string", "description": "Stripe charge or session ID" },
+        "amount": { "type": "number", "description": "The total amount paid" },
+        "currency": { "type": "string", "description": "ISO currency code, normally USD" },
+        "paymentMethod": { "type": "string", "description": "Visa, MasterCard, Apple Pay, etc." },
+        "invoiceNumber": { "type": "string", "description": "Auto-incremented invoice code" },
+        "date": { "type": "string", "description": "Payment creation timestamp" },
+        "plan": { "type": "string", "description": "Purchased subscription tier" },
+        "status": { "type": "string", "enum": ["completed", "failed", "refunded", "canceled", "pending"], "description": "Transaction state" },
+        "refundStatus": { "type": "string", "enum": ["none", "refunded"], "description": "Refund audit state" }
+      },
+      "required": ["id", "userId", "transactionId", "amount", "status"]
+    },
+    "ContactMessage": {
+      "title": "Inquiry Message",
+      "description": "Landing page inquiries and customer feedback",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique inquiry message ID" },
+        "name": { "type": "string", "description": "Submitter sender name" },
+        "email": { "type": "string", "description": "Contact email address" },
+        "message": { "type": "string", "description": "The message body content" },
+        "status": { "type": "string", "enum": ["unread", "read", "replied", "archived"], "description": "Administration ticket state" },
+        "replyMessage": { "type": "string", "description": "Admin response message text" },
+        "date": { "type": "string", "description": "Message receipt timestamp" }
+      },
+      "required": ["id", "name", "email", "message", "status"]
+    },
+    "Analytics": {
+      "title": "System Analytics",
+      "description": "Global usage stats, server metrics, and access histories",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Static document identifier" },
+        "websiteVisitors": { "type": "number", "description": "Count of visitors" },
+        "dailyLogs": { "type": "array", "description": "Log records aggregated daily" },
+        "monthlyLogs": { "type": "array", "description": "Log records aggregated monthly" },
+        "updatedAt": { "type": "string", "description": "Last metrics calculation timestamp" }
+      },
+      "required": ["id"]
+    },
+    "Subscription": {
+      "title": "User Subscription",
+      "description": "Detailed pricing subscription status",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique subscription tracker key" },
+        "userId": { "type": "string", "description": "The customer ID reference" },
+        "plan": { "type": "string", "description": "Subscribed plan tier" },
+        "startDate": { "type": "string", "description": "Activation period timestamp" },
+        "endDate": { "type": "string", "description": "Expiry or renewal date" },
+        "status": { "type": "string", "description": "Status code: active, trialing, past_due, canceled" },
+        "cancelAtPeriodEnd": { "type": "boolean", "description": "Flag for auto-renewal state" }
+      },
+      "required": ["id", "userId", "plan", "status"]
+    },
+    "Setting": {
+      "title": "Global Settings",
+      "description": "SaaS application settings and security properties",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Static config identifier" },
+        "maintenanceMode": { "type": "boolean", "description": "Toggle to place application in maintenance" },
+        "allowedDomains": { "type": "array", "description": "CORS domain lists" }
+      },
+      "required": ["id"]
+    }
+  },
+  "firestore": {
+    "users": {
+      "schema": "User",
+      "description": "Registered SaaS users mapped by Auth ID"
+    },
+    "resumes": {
+      "schema": "Resume",
+      "description": "User CVs and resumes created"
+    },
+    "payments": {
+      "schema": "Payment",
+      "description": "Transaction logs for card purchases"
+    },
+    "contactMessages": {
+      "schema": "ContactMessage",
+      "description": "Customer inquiry tickets"
+    },
+    "analytics": {
+      "schema": "Analytics",
+      "description": "Usage counters and records"
+    },
+    "subscriptions": {
+      "schema": "Subscription",
+      "description": "Active billing subscriptions"
+    },
+    "settings": {
+      "schema": "Setting",
+      "description": "Administrative configurations"
+    }
+  }
+}
