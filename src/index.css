@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", Georgia, Cambria, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* Vibrant Palette Core Styling Classes */
+.glass-sidebar {
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(8px) !important;
+  border-right: 1px solid #E2E8F0 !important;
+}
+
+.editor-pane {
+  background-color: #FFFFFF !important;
+  box-shadow: inset -2px 0 10px rgba(0,0,0,0.02) !important;
+}
+
+.preview-pane {
+  background-color: #E2E8F0 !important;
+  background-image: radial-gradient(#CBD5E1 1px, transparent 1px) !important;
+  background-size: 20px 20px !important;
+}
+
+.resume-paper {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Print Overrides to create professional standard PDFs */
+@media print {
+  body {
+    background-color: white !important;
+    color: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide all UI elements from print view except the actual CV sheet */
+  body > div > main,
+  body > div > aside,
+  div.print\:hidden,
+  button,
+  header,
+  aside,
+  footer,
+  select,
+  nav {
+    display: none !important;
+  }
+
+  /* Make sure the CV is visible and spans full dimensions */
+  #cv-preview-sheet {
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 21cm !important;
+    min-height: 29.7cm !important;
+    border: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+}

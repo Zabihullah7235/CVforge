@@ -1,0 +1,6 @@
+{
+  "name": "CVForge",
+  "description": "An elite AI-powered professional resume and CV builder equipped with ATS scanner simulations, profile picture photo generation, and multi-turn career coaching advisors.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
